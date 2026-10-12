@@ -25,7 +25,7 @@ public:
 	bool bIsVisited{ false };
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra")
-	int Cost{ INT_MAX };
+	int Cost{ 1000 };	// should be infinity at start, but that takes too long to display in the label, so we use 1000 instead
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,11 +34,29 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UTextRenderComponent> LabelComponent;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Appearance", meta = (AllowPrivateAccess = "true"))
-	FLinearColor TintColor = FLinearColor::Blue;
+	FLinearColor TintColor = FLinearColor::White;
 
 	UPROPERTY()
 	UMaterialInstanceDynamic* DynMaterial{ nullptr };
 	// TObjectPtr<UMaterialInstanceDynamic> DynMaterial; // Modern Unreal Engine 5 way to declare a pointer
+
+	// Previous cheapest node coordinates in the grid
+	// Used for backtracking the path after Dijkstra's algorithm has completed
+	int PreviousX{ -1 };
+	int PreviousY{ -1 };
 };
+
+
+
+// Idea:
+// The color will tell if it is visited
+//     White = unvisited
+//     Blue = visited
+//	   Green = start node
+//	   Red = end node
+//	   Yellow = part of the final path
 

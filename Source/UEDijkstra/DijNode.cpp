@@ -2,6 +2,7 @@
 
 #include "DijNode.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/TextRenderComponent.h"
 
 ADijNode::ADijNode()
 {
@@ -16,6 +17,18 @@ ADijNode::ADijNode()
 	{
 		MeshComponent->SetStaticMesh(CubeMesh.Object);
 	}
+
+	LabelComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("LabelComponent"));
+	LabelComponent->SetupAttachment(MeshComponent);
+
+	// Engine cube is 100 units tall and centered on its pivot, so the top face is at Z = 50
+	LabelComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 70.0f));
+	LabelComponent->SetHorizontalAlignment(EHTA_Center);
+	LabelComponent->SetVerticalAlignment(EVRTA_TextCenter);
+	LabelComponent->SetWorldRotation(FRotator(90.0f, 0.0f, 180.0f));
+	LabelComponent->SetWorldSize(30.0f);
+	LabelComponent->SetTextRenderColor(FColor::Black);
+	LabelComponent->SetText(FText::AsNumber(Cost));
 
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> BaseColorMaterial(TEXT("/Game/Materials/M_BaseColor.M_BaseColor"));
 	if (BaseColorMaterial.Succeeded())
