@@ -77,3 +77,7 @@ DerivedDataCache/*
 .vsconfig
 *.slnx
 
+.DS_Store
+.ignore
+/.vscode
+*.code-workspace
