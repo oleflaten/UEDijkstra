@@ -25,7 +25,7 @@ public:
 	bool bIsVisited{ false };
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra")
-	int Cost{ 1000 };	// should be infinity at start, but that takes too long to display in the label, so we use 1000 instead
+	int Cost{ 999 };	// should be infinity at start, but that takes too long to display in the label, so we use 999 instead
 
 protected:
 	virtual void BeginPlay() override;

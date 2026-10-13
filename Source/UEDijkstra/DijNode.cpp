@@ -34,7 +34,7 @@ ADijNode::ADijNode()
 	if (BaseColorMaterial.Succeeded())
 	{
 		MeshComponent->SetMaterial(0, BaseColorMaterial.Object);
-		UE_LOG(LogTemp, Warning, TEXT("Constructor: M_BaseColor found and assigned"));
+		//UE_LOG(LogTemp, Warning, TEXT("Constructor: M_BaseColor found and assigned"));
 	}
 	else
 	{
@@ -48,7 +48,7 @@ void ADijNode::BeginPlay()
 	Super::BeginPlay();
 
 	UMaterialInterface* CurrentMaterial = MeshComponent->GetMaterial(0);
-	UE_LOG(LogTemp, Warning, TEXT("BeginPlay: slot 0 is %s"), CurrentMaterial ? *CurrentMaterial->GetName() : TEXT("none"));
+	//UE_LOG(LogTemp, Warning, TEXT("BeginPlay: slot 0 is %s"), CurrentMaterial ? *CurrentMaterial->GetName() : TEXT("none"));
 
 	// Create a dynamic material instance for the mesh component
 	DynMaterial = MeshComponent->CreateAndSetMaterialInstanceDynamic(0);
@@ -58,7 +58,7 @@ void ADijNode::BeginPlay()
 	{
 		// "Color" must match the parameter name in M_BaseColor exactly
 		DynMaterial->SetVectorParameterValue(TEXT("Color"), TintColor);
-		UE_LOG(LogTemp, Warning, TEXT("Material color is set."));
+		//UE_LOG(LogTemp, Warning, TEXT("Material color is set."));
 	}
 	else
 	{
