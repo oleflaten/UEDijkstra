@@ -26,6 +26,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra")
 	int Cost{ 999 };	// should be infinity at start, but that is too big for the label, so we use 999 instead - OK till 31x31
+						// if this is set to -1 , it means this node is a wall and cannot be traversed
 
 	void SetMaterialColor(const FLinearColor& NewColor);
 	void SetCost(int NewCost);
@@ -65,5 +66,5 @@ private:
 //	   Green = start node
 //	   Red = end node
 //	   Yellow = part of the final path
-//     Black = wall
+//     Black = wall   - cost = -1, you cannot traverse this node
 

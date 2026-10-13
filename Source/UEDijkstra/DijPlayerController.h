@@ -30,10 +30,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> RightClickAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> MiddleClickAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> StartAction;
+
 	UPROPERTY()
 	TObjectPtr<ADijSpawner> Spawner;
 
 private:
 	void OnLeftClick(const FInputActionValue& Value);
 	void OnRightClick(const FInputActionValue& Value);
+	void OnMiddleClick(const FInputActionValue& Value);
+	void OnStartAction(const FInputActionValue& Value);
 };

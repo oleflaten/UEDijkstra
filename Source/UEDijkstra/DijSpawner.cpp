@@ -5,7 +5,7 @@
 
 ADijSpawner::ADijSpawner()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Create a default static mesh component and set it as the root component
 	// Even if it is empty, it will allow us to place the spawner in the world
@@ -28,6 +28,7 @@ void ADijSpawner::BeginPlay()
 
 	Nodes.Reserve(Rows * Columns);
 
+	// Spawn a grid of nodes
 	for (int32 Row = 0; Row < Rows; ++Row)
 	{
 		for (int32 Column = 0; Column < Columns; ++Column)
@@ -50,5 +51,21 @@ void ADijSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ADijSpawner::RunDijkstra()
+{
+	UE_LOG(LogTemp, Warning, TEXT("RunDijkstra called! Now things should happen..."));
+
+	// Restart cleanly if a run is already in progress
+	GetWorldTimerManager().ClearTimer(StepTimerHandle);
+
+	// Start the timer to call StepDijkstra at intervals defined by StepDelay
+	GetWorldTimerManager().SetTimer(StepTimerHandle, this, &ADijSpawner::StepDijkstra, StepDelay, true);
+}
+
+void ADijSpawner::StepDijkstra()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Stepping Dijkstra! Things are happening..."));
 }
 

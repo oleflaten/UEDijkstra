@@ -46,13 +46,15 @@ void ADijPlayerController::SetupInputComponent()
 	{
 		EIC->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ADijPlayerController::OnLeftClick);
 		EIC->BindAction(RightClickAction, ETriggerEvent::Started, this, &ADijPlayerController::OnRightClick);
+		EIC->BindAction(MiddleClickAction, ETriggerEvent::Started, this, &ADijPlayerController::OnMiddleClick);
+		EIC->BindAction(StartAction, ETriggerEvent::Started, this, &ADijPlayerController::OnStartAction);
 	}
 }
 
+// Set Start node
 void ADijPlayerController::OnLeftClick(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController Left click detected"));
-
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Left click detected"));
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
 	{
@@ -69,9 +71,10 @@ void ADijPlayerController::OnLeftClick(const FInputActionValue& Value)
 	}
 }
 
+// Set End node
 void ADijPlayerController::OnRightClick(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController Right click detected"));
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Right click detected"));
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
 	{
@@ -83,5 +86,37 @@ void ADijPlayerController::OnRightClick(const FInputActionValue& Value)
 			ClickedNode->bIsEndNode = true;
 			ClickedNode->SetMaterialColor(FLinearColor::Red);
 		}
+	}
+}
+
+// Set Wall nodes
+void ADijPlayerController::OnMiddleClick(const FInputActionValue& Value)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Middle click detected"));
+	FHitResult Hit;
+	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
+	{
+		if (ADijNode* ClickedNode = Cast<ADijNode>(Hit.GetActor()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Clicked node: %s, component: %s"),
+				*GetNameSafe(ClickedNode), *GetNameSafe(Hit.GetComponent()));
+			
+			ClickedNode->SetMaterialColor(FLinearColor::Black);
+			ClickedNode->SetCost(-1);	//this means this node is a wall and cannot be traversed
+		}
+	}
+}
+
+// Run Dijkstra's algorithm - default is space bar, but can be changed in the input mapping context
+void ADijPlayerController::OnStartAction(const FInputActionValue& Value)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Start action detected"));
+	if (Spawner)
+	{
+		Spawner->RunDijkstra();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Spawner found to run Dijkstra's algorithm"));
 	}
 }
