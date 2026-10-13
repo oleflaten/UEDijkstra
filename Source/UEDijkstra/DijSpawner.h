@@ -35,10 +35,16 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ADijNode> NodeClass = ADijNode::StaticClass();
 
-	UPROPERTY()
-	TArray<TObjectPtr<ADijNode>> Nodes;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
+	ADijNode* StartNode{ nullptr };
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
+	ADijNode* EndNode{ nullptr };
 
 	UPROPERTY()
-	TObjectPtr<UStaticMeshComponent> MeshComponent;
+	TArray<TObjectPtr<ADijNode>> Nodes;	
+
+	UPROPERTY()
+	TObjectPtr<UStaticMeshComponent> MeshComponent;	// A dummy just to be able to place the spawner in the world, even if it is empty
 };
 	

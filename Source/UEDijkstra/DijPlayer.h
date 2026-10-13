@@ -19,14 +19,8 @@ public:
 
 protected:
     virtual void BeginPlay() override;
-    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-    virtual void PossessedBy(AController* NewController) override;
 
 private:
-    // void Turn(float Value);
-    // void LookUp(float Value);
-
 	void OnLeftClick();
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))

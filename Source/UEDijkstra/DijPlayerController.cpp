@@ -41,7 +41,7 @@ void ADijPlayerController::SetupInputComponent()
 
 void ADijPlayerController::OnLeftClick(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Left click detected"));
+	UE_LOG(LogTemp, Warning, TEXT("PlayerController Left click detected"));
 
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
