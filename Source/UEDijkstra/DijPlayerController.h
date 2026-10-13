@@ -9,6 +9,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class ADijSpawner;
 
 UCLASS()
 class UEDIJKSTRA_API ADijPlayerController : public APlayerController
@@ -24,8 +25,15 @@ protected:
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputAction> ClickAction;
+	TObjectPtr<UInputAction> LeftClickAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> RightClickAction;
+
+	UPROPERTY()
+	TObjectPtr<ADijSpawner> Spawner;
 
 private:
 	void OnLeftClick(const FInputActionValue& Value);
+	void OnRightClick(const FInputActionValue& Value);
 };

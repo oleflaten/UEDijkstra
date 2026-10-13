@@ -21,7 +21,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
 	int Rows = 15;
 
@@ -46,5 +45,8 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UStaticMeshComponent> MeshComponent;	// A dummy just to be able to place the spawner in the world, even if it is empty
+
+
+	friend class ADijPlayerController;
 };
 	

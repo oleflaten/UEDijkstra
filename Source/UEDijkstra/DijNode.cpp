@@ -22,8 +22,8 @@ ADijNode::ADijNode()
 	LabelComponent->SetupAttachment(MeshComponent);
 
 	// Engine cube is 100 units tall and centered on its pivot, so the top face is at Z = 50
-	LabelComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 70.0f));
-	LabelComponent->SetHorizontalAlignment(EHTA_Center);
+	LabelComponent->SetRelativeLocation(FVector(30.0f, 40.0f, 51.0f));
+	LabelComponent->SetHorizontalAlignment(EHTA_Right);
 	LabelComponent->SetVerticalAlignment(EVRTA_TextCenter);
 	LabelComponent->SetWorldRotation(FRotator(90.0f, 0.0f, 180.0f));
 	LabelComponent->SetWorldSize(30.0f);
@@ -41,6 +41,31 @@ ADijNode::ADijNode()
 		UE_LOG(LogTemp, Error, TEXT("Did not find BaseColor material."));
 	}
 
+}
+
+void ADijNode::SetMaterialColor(const FLinearColor& NewColor)
+{
+	if (DynMaterial)
+	{
+		DynMaterial->SetVectorParameterValue(TEXT("Color"), NewColor);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No dynamic material. Check that the mesh has a material in slot 0."));
+	}
+}
+
+void ADijNode::SetCost(int NewCost)
+{
+	Cost = NewCost;
+	if (LabelComponent)
+	{
+		LabelComponent->SetText(FText::AsNumber(Cost));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("LabelComponent is null. Cannot update cost label."));
+	}
 }
 
 void ADijNode::BeginPlay()

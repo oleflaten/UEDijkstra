@@ -25,7 +25,10 @@ public:
 	bool bIsVisited{ false };
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra")
-	int Cost{ 999 };	// should be infinity at start, but that takes too long to display in the label, so we use 999 instead
+	int Cost{ 999 };	// should be infinity at start, but that is too big for the label, so we use 999 instead - OK till 31x31
+
+	void SetMaterialColor(const FLinearColor& NewColor);
+	void SetCost(int NewCost);
 
 protected:
 	virtual void BeginPlay() override;
@@ -48,6 +51,9 @@ private:
 	// Used for backtracking the path after Dijkstra's algorithm has completed
 	int PreviousX{ -1 };
 	int PreviousY{ -1 };
+
+
+	friend class ADijPlayerController; // Allow the player controller to access private members of this class
 };
 
 
@@ -59,4 +65,5 @@ private:
 //	   Green = start node
 //	   Red = end node
 //	   Yellow = part of the final path
+//     Black = wall
 
