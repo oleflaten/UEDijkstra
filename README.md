@@ -20,9 +20,9 @@ When you run the program the nodes are spawned in a grid.
 
 ### Idea:
 The color should tell the state of the Node
-	White = unvisited
-	Blue = visited
-	Green = start node
-	Red = end node
-	Yellow = part of the final path, shown after a path is found
-	Black = wall   set to cost = -1, you cannot traverse this node
+- White = unvisited
+- Blue = visited
+- Green = start node
+- Red = end node
+- Yellow = part of the final path, shown after a path is found
+- Black = wall   set to cost = -1, you cannot traverse this node
