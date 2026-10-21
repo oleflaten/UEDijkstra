@@ -58,7 +58,8 @@ void ADijSpawner::Tick(float DeltaTime)
 
 void ADijSpawner::RunDijkstra()
 {
-	UE_LOG(LogTemp, Warning, TEXT("RunDijkstra called! Now things should happen..."));
+	// bAStar decides which search algorithm will run
+	UE_LOG(LogTemp, Warning, TEXT("RunDijkstra called! Running %s..."), bAStar ? TEXT("A*") : TEXT("Dijkstra"));
 
 	// Restart cleanly if a run is already in progress
 	StopDijkstra();
@@ -67,7 +68,7 @@ void ADijSpawner::RunDijkstra()
 	if (!StartNode || !EndNode || StartNode->Cost == -1 || EndNode->Cost == -1)
 	{
 		ResetNodes();
-		UE_LOG(LogTemp, Warning, TEXT("Cannot run Dijkstra. Need a start node (left click) and an end node (right click), and neither may be a wall."));
+		UE_LOG(LogTemp, Warning, TEXT("Cannot run %s. Need a start node (left click) and an end node (right click), and neither may be a wall."), bAStar ? TEXT("A*") : TEXT("Dijkstra"));
 		return;
 	}
 
@@ -164,7 +165,7 @@ void ADijSpawner::StepDijkstra()
 	if (CurrentNode == EndNode)
 	{
 		TracePathAndColor();
-		UE_LOG(LogTemp, Warning, TEXT("Dijkstra finished! The end node was reached with a cost of %d."), CurrentNode->Cost);
+		UE_LOG(LogTemp, Warning, TEXT("%s finished! The end node was reached with a cost of %d."), bAStar ? TEXT("A*") : TEXT("Dijkstra"), CurrentNode->Cost);
 		StopDijkstra();
 		return;
 	}
@@ -178,13 +179,13 @@ void ADijSpawner::StepDijkstra()
 	// Relax all horizontal and vertical neighbors (no diagonals)
 	RelaxNeighbors(CurrentNode);
 
-	// Pick the next node: the unvisited node with the lowest cost
+	// Pick the next node: the unvisited node with the lowest priority (cost, or cost + heuristic in A* mode)
 	CurrentNode = GetNextCurrentNode();
 
 	// If no reachable node is left, the end node cannot be reached
 	if (!CurrentNode)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Dijkstra finished without finding a path to the end node."));
+		UE_LOG(LogTemp, Warning, TEXT("%s finished without finding a path to the end node."), bAStar ? TEXT("A*") : TEXT("Dijkstra"));
 		StopDijkstra();
 	}
 }
@@ -282,6 +283,7 @@ void ADijSpawner::TracePathAndColor()
 ADijNode* ADijSpawner::GetNextCurrentNode()
 {
 	ADijNode* BestNode = nullptr;
+	int32 BestPriority = 0;
 	int32 BestIndex = 0;
 
 	for (ADijNode* Node : UnvisitedNodes)
@@ -292,15 +294,19 @@ ADijNode* ADijSpawner::GetNextCurrentNode()
 			continue;
 		}
 
+		// Dijkstra: the priority is the cost (g). A*: the priority is cost + heuristic (f = g + h)
+		const int32 Priority = Node->Cost + (bAStar ? Node->Heuristics : 0);
+
 		// The index in the grid (spawned row-major) gives us a stable tie-break order
 		const int32 NodeIndex = Nodes.IndexOfByKey(TObjectPtr<ADijNode>(Node));
 
-		// The lowest cost wins; ties are broken by grid position for a predictable animation
+		// The lowest priority wins; ties are broken by grid position for a predictable animation
 		if (!BestNode ||
-			Node->Cost < BestNode->Cost ||
-			(Node->Cost == BestNode->Cost && NodeIndex < BestIndex))
+			Priority < BestPriority ||
+			(Priority == BestPriority && NodeIndex < BestIndex))
 		{
 			BestNode = Node;
+			BestPriority = Priority;
 			BestIndex = NodeIndex;
 		}
 	}

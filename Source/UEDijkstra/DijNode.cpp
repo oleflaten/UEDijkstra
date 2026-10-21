@@ -27,7 +27,7 @@ ADijNode::ADijNode()
 	LabelComponent->SetVerticalAlignment(EVRTA_TextCenter);
 	LabelComponent->SetWorldRotation(FRotator(90.0f, 0.0f, 180.0f));
 	LabelComponent->SetWorldSize(30.0f);
-	LabelComponent->SetTextRenderColor(FColor::Emerald);
+	LabelComponent->SetTextRenderColor(FColor::Black);
 	LabelComponent->SetText(FText::AsNumber(Cost));
 
 	// The heuristic label is only used in A* mode. CreateDefaultSubobject can only be called in the constructor,

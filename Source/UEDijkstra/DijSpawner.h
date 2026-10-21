@@ -37,6 +37,7 @@ private:
 	ADijNode* GetNodeAt(int32 Row, int32 Column) const;
 	void GetGridCoordinates(ADijNode* Node, int32& OutRow, int32& OutColumn) const;
 
+	// true = run the A* algorithm (selection on cost + heuristic), false = run Dijkstra (selection on cost)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
 	bool bAStar = false;
 

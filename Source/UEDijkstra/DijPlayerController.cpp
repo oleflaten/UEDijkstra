@@ -108,6 +108,7 @@ void ADijPlayerController::OnMiddleClick(const FInputActionValue& Value)
 				*GetNameSafe(ClickedNode), *GetNameSafe(Hit.GetComponent()));
 			
 			ClickedNode->SetMaterialColor(FLinearColor::Black);
+			ClickedNode->SetAStar(false);
 			ClickedNode->SetCost(-1);	//this means this node is a wall and cannot be traversed
 		}
 	}
