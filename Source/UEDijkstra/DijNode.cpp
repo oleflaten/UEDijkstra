@@ -27,7 +27,7 @@ ADijNode::ADijNode()
 	LabelComponent->SetVerticalAlignment(EVRTA_TextCenter);
 	LabelComponent->SetWorldRotation(FRotator(90.0f, 0.0f, 180.0f));
 	LabelComponent->SetWorldSize(30.0f);
-	LabelComponent->SetTextRenderColor(FColor::Black);
+	LabelComponent->SetTextRenderColor(FColor::Emerald);
 	LabelComponent->SetText(FText::AsNumber(Cost));
 
 	// The heuristic label is only used in A* mode. CreateDefaultSubobject can only be called in the constructor,
@@ -90,6 +90,19 @@ void ADijNode::SetAStar(bool bEnabled)
 	if (LabelHeuristicComponent)
 	{
 		LabelHeuristicComponent->SetVisibility(bAStar);
+	}
+}
+
+void ADijNode::SetHeuristics(int NewHeuristics)
+{
+	Heuristics = NewHeuristics;
+	if (LabelHeuristicComponent)
+	{
+		LabelHeuristicComponent->SetText(FText::AsNumber(Heuristics));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("LabelHeuristicComponent is null. Cannot update heuristic label."));
 	}
 }
 

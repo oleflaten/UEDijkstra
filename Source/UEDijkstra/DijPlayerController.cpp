@@ -67,6 +67,9 @@ void ADijPlayerController::OnLeftClick(const FInputActionValue& Value)
 			ClickedNode->bIsStartNode = true;
 			ClickedNode->SetMaterialColor(FLinearColor::Green);
 			ClickedNode->SetCost(0);
+
+			// Now that (potentially) both start and end are set, show the heuristics
+			Spawner->UpdateHeuristics();
 		}
 	}
 }
@@ -85,6 +88,9 @@ void ADijPlayerController::OnRightClick(const FInputActionValue& Value)
 			Spawner->EndNode = ClickedNode;
 			ClickedNode->bIsEndNode = true;
 			ClickedNode->SetMaterialColor(FLinearColor::Red);
+
+			// Now that (potentially) both start and end are set, show the heuristics
+			Spawner->UpdateHeuristics();
 		}
 	}
 }

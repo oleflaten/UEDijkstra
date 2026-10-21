@@ -71,10 +71,53 @@ void ADijSpawner::RunDijkstra()
 		return;
 	}
 
+	// Make sure the heuristic labels are up to date (in A* mode)
+	UpdateHeuristics();
+
 	InitializeDijkstra();
 
 	// Start the timer to call StepDijkstra at intervals defined by StepDelay
 	GetWorldTimerManager().SetTimer(StepTimerHandle, this, &ADijSpawner::StepDijkstra, StepDelay, true);
+}
+
+void ADijSpawner::UpdateHeuristics()
+{
+	// The heuristic label is only shown in A* mode
+	if (!bAStar)
+	{
+		return;
+	}
+
+	// The heuristic needs both a start node and an end node
+	const bool bValid = (StartNode && EndNode);
+
+	int32 EndRow = 0;
+	int32 EndColumn = 0;
+	if (bValid)
+	{
+		GetGridCoordinates(EndNode, EndRow, EndColumn);
+	}
+
+	for (ADijNode* Node : Nodes)
+	{
+		if (!Node)
+		{
+			continue;
+		}
+
+		int32 Heuristics = 0;
+		if (bValid)
+		{
+			int32 Row = 0;
+			int32 Column = 0;
+			GetGridCoordinates(Node, Row, Column);
+
+			// Manhattan distance to the end node (the search only moves horizontal and vertical)
+			Heuristics = FMath::Abs(Row - EndRow) + FMath::Abs(Column - EndColumn);
+		}
+
+		Node->SetHeuristics(Heuristics); // also updates the (red) heuristic label
+	}
 }
 
 void ADijSpawner::InitializeDijkstra()

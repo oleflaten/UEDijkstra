@@ -19,6 +19,9 @@ public:
 
 	void RunDijkstra();
 
+	// (Re)calculates the Manhattan distance heuristic for all nodes, towards the end node
+	void UpdateHeuristics();
+
 protected:
 	virtual void BeginPlay() override;
 

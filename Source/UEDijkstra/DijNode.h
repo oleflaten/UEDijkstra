@@ -37,6 +37,8 @@ public:
 	// Enables or disables A* mode: shows or hides the (red) heuristic label
 	void SetAStar(bool bEnabled);
 
+	void SetHeuristics(int NewHeuristics);
+
 protected:
 	virtual void BeginPlay() override;
 
