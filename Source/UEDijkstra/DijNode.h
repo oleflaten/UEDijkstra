@@ -55,6 +55,7 @@ private:
 
 
 	friend class ADijPlayerController; // Allow the player controller to access private members of this class
+	friend class ADijSpawner; // Allow the spawner to access private members (the Dijkstra algorithm reads and writes PreviousX/PreviousY)
 };
 
 

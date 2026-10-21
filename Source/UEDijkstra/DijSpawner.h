@@ -25,6 +25,15 @@ protected:
 private:
 	void StepDijkstra();
 
+	void InitializeDijkstra();
+	void StopDijkstra();
+	void ResetNodes();
+	void RelaxNeighbors(ADijNode* Node);
+	void TracePathAndColor();
+	ADijNode* GetNextCurrentNode();
+	ADijNode* GetNodeAt(int32 Row, int32 Column) const;
+	void GetGridCoordinates(ADijNode* Node, int32& OutRow, int32& OutColumn) const;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
 	int Rows = 15;
@@ -57,6 +66,15 @@ private:
 	float StepDelay = 0.3f;
 
 	FTimerHandle StepTimerHandle;
+
+	// The node that is being finalized in the current step of the algorithm
+	ADijNode* CurrentNode{ nullptr };
+
+	// The nodes that have not been visited yet
+	TSet<ADijNode*> UnvisitedNodes;
+
+	// Whether a run of the algorithm is currently in progress
+	bool bIsRunning{ false };
 
 
 	// A dummy just to be able to place the spawner in the world, even if it is empty
