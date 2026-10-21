@@ -34,6 +34,8 @@ private:
 	ADijNode* GetNodeAt(int32 Row, int32 Column) const;
 	void GetGridCoordinates(ADijNode* Node, int32& OutRow, int32& OutColumn) const;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
+	bool bAStar = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra", meta = (AllowPrivateAccess = "true"))
 	int Rows = 15;

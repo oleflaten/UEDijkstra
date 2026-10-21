@@ -39,6 +39,11 @@ void ADijSpawner::BeginPlay()
 			SpawnParams.Owner = this;
 
 			ADijNode* Node = World->SpawnActor<ADijNode>(NodeClass, Location, FRotator::ZeroRotator, SpawnParams);
+			// In A* mode the nodes also show their heuristic as a red label
+			if (Node && bAStar)
+			{
+				Node->SetAStar(true);
+			}
 			// Even a failed spawn adds a nullptr, so the array index always matches the grid position
 			Nodes.Add(Node);
 		}

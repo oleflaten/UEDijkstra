@@ -30,6 +30,22 @@ ADijNode::ADijNode()
 	LabelComponent->SetTextRenderColor(FColor::Black);
 	LabelComponent->SetText(FText::AsNumber(Cost));
 
+	// The heuristic label is only used in A* mode. CreateDefaultSubobject can only be called in the constructor,
+	// and the constructor cannot know how the node will be used, so the label is always created
+	// and hidden until A* mode is enabled with SetAStar()
+	LabelHeuristicComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HeuristicsLabel"));
+	LabelHeuristicComponent->SetupAttachment(MeshComponent);
+
+	// Engine cube is 100 units tall and centered on its pivot, so the top face is at Z = 50
+	// Placed on the opposite face from the cost label, so the two labels never overlap
+	LabelHeuristicComponent->SetRelativeLocation(FVector(0.0f, 40.0f, 51.0f));
+	LabelHeuristicComponent->SetHorizontalAlignment(EHTA_Right);
+	LabelHeuristicComponent->SetVerticalAlignment(EVRTA_TextCenter);
+	LabelHeuristicComponent->SetWorldRotation(FRotator(90.0f, 0.0f, 180.0f));
+	LabelHeuristicComponent->SetWorldSize(30.0f);
+	LabelHeuristicComponent->SetTextRenderColor(FColor::Red);
+	LabelHeuristicComponent->SetText(FText::AsNumber(Heuristics));
+	LabelHeuristicComponent->SetVisibility(bAStar);
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> BaseColorMaterial(TEXT("/Game/Materials/M_BaseColor.M_BaseColor"));
 	if (BaseColorMaterial.Succeeded())
 	{
@@ -68,6 +84,15 @@ void ADijNode::SetCost(int NewCost)
 	}
 }
 
+void ADijNode::SetAStar(bool bEnabled)
+{
+	bAStar = bEnabled;
+	if (LabelHeuristicComponent)
+	{
+		LabelHeuristicComponent->SetVisibility(bAStar);
+	}
+}
+
 void ADijNode::BeginPlay()
 {
 	Super::BeginPlay();
@@ -89,7 +114,13 @@ void ADijNode::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No dynamic material. Check that the mesh has a material in slot 0."));
 	}
-	
+
+	// The constructor ran before the spawner (or the editor) could set bAStar,
+	// so make the heuristic label visibility match bAStar now
+	if (LabelHeuristicComponent)
+	{
+		LabelHeuristicComponent->SetVisibility(bAStar);
+	}
 }
 
 void ADijNode::Tick(float DeltaTime)
