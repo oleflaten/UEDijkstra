@@ -81,6 +81,57 @@ void ADijSpawner::RunDijkstra()
 	GetWorldTimerManager().SetTimer(StepTimerHandle, this, &ADijSpawner::StepDijkstra, StepDelay, true);
 }
 
+void ADijSpawner::ToggleRunPause()
+{
+	if (!bIsRunning)
+	{
+		RunDijkstra();
+	}
+	else if (bIsPaused)
+	{
+		ResumeDijkstra();
+	}
+	else
+	{
+		PauseDijkstra();
+	}
+}
+
+void ADijSpawner::PauseDijkstra()
+{
+	if (!bIsRunning || bIsPaused)
+	{
+		return;
+	}
+
+	GetWorldTimerManager().ClearTimer(StepTimerHandle);
+	bIsPaused = true;
+	UE_LOG(LogTemp, Warning, TEXT("Search paused."));
+}
+
+void ADijSpawner::ResumeDijkstra()
+{
+	if (!bIsRunning || !bIsPaused)
+	{
+		return;
+	}
+
+	bIsPaused = false;
+	GetWorldTimerManager().SetTimer(StepTimerHandle, this, &ADijSpawner::StepDijkstra, StepDelay, true);
+	UE_LOG(LogTemp, Warning, TEXT("Search resumed."));
+}
+
+void ADijSpawner::StepOnce()
+{
+	if (!bIsRunning || !bIsPaused)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Manual stepping is available only while the search is paused."));
+		return;
+	}
+
+	StepDijkstra();
+}
+
 void ADijSpawner::UpdateHeuristics()
 {
 	// The heuristic label is only shown in A* mode
@@ -145,6 +196,7 @@ void ADijSpawner::InitializeDijkstra()
 void ADijSpawner::StopDijkstra()
 {
 	bIsRunning = false;
+ bIsPaused = false;
 	GetWorldTimerManager().ClearTimer(StepTimerHandle);
 }
 

@@ -50,6 +50,10 @@ void ADijPlayerController::SetupInputComponent()
 		EIC->BindAction(StartAction, ETriggerEvent::Started, this, &ADijPlayerController::OnStartAction);
 		EIC->BindAction(StepAction, ETriggerEvent::Started, this, &ADijPlayerController::OnStepAction);
 	}
+   else
+	{
+		UE_LOG(LogTemp, Error, TEXT("InputComponent is not an EnhancedInputComponent."));
+	}
 }
 
 // Set Start node
@@ -121,7 +125,7 @@ void ADijPlayerController::OnStartAction(const FInputActionValue& Value)
 	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Start action detected"));
 	if (Spawner)
 	{
-		Spawner->RunDijkstra();
+     Spawner->ToggleRunPause();
 	}
 	else
 	{
@@ -129,12 +133,14 @@ void ADijPlayerController::OnStartAction(const FInputActionValue& Value)
 	}
 }
 
+// Step Dijkstra's algorithm once - default is 'S' key, but can be changed in the input mapping context
 void ADijPlayerController::OnStepAction(const FInputActionValue& Value)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Step action detected"));
+	UE_LOG(LogTemp, Warning, TEXT("PlayerController Step action detected"));
+
 	if (Spawner)
 	{
-		Spawner->StepDijkstra();
+        Spawner->StepOnce();
 	}
 	else
 	{

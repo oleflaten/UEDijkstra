@@ -18,6 +18,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void RunDijkstra();
+	void ToggleRunPause();
+	void StepOnce();
 
 	// (Re)calculates the Manhattan distance heuristic for all nodes, towards the end node
 	void UpdateHeuristics();
@@ -27,6 +29,8 @@ protected:
 
 private:
 	void StepDijkstra();
+	void PauseDijkstra();
+	void ResumeDijkstra();
 
 	void InitializeDijkstra();
 	void StopDijkstra();
@@ -81,6 +85,7 @@ private:
 
 	// Whether a run of the algorithm is currently in progress
 	bool bIsRunning{ false };
+	bool bIsPaused{ false };
 
 
 	// A dummy just to be able to place the spawner in the world, even if it is empty
