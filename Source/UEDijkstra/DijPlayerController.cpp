@@ -48,6 +48,7 @@ void ADijPlayerController::SetupInputComponent()
 		EIC->BindAction(RightClickAction, ETriggerEvent::Started, this, &ADijPlayerController::OnRightClick);
 		EIC->BindAction(MiddleClickAction, ETriggerEvent::Started, this, &ADijPlayerController::OnMiddleClick);
 		EIC->BindAction(StartAction, ETriggerEvent::Started, this, &ADijPlayerController::OnStartAction);
+		EIC->BindAction(StepAction, ETriggerEvent::Started, this, &ADijPlayerController::OnStepAction);
 	}
 }
 
@@ -125,5 +126,18 @@ void ADijPlayerController::OnStartAction(const FInputActionValue& Value)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No Spawner found to run Dijkstra's algorithm"));
+	}
+}
+
+void ADijPlayerController::OnStepAction(const FInputActionValue& Value)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Step action detected"));
+	if (Spawner)
+	{
+		Spawner->StepDijkstra();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Spawner found to step Dijkstra's algorithm"));
 	}
 }

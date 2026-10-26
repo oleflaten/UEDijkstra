@@ -20,7 +20,6 @@ ADijNode::ADijNode()
 
 	LabelComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("LabelComponent"));
 	LabelComponent->SetupAttachment(MeshComponent);
-
 	// Engine cube is 100 units tall and centered on its pivot, so the top face is at Z = 50
 	LabelComponent->SetRelativeLocation(FVector(30.0f, 40.0f, 51.0f));
 	LabelComponent->SetHorizontalAlignment(EHTA_Right);
@@ -35,7 +34,6 @@ ADijNode::ADijNode()
 	// and hidden until A* mode is enabled with SetAStar()
 	LabelHeuristicComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HeuristicsLabel"));
 	LabelHeuristicComponent->SetupAttachment(MeshComponent);
-
 	// Engine cube is 100 units tall and centered on its pivot, so the top face is at Z = 50
 	// Placed on the opposite face from the cost label, so the two labels never overlap
 	LabelHeuristicComponent->SetRelativeLocation(FVector(0.0f, 40.0f, 51.0f));
@@ -46,6 +44,21 @@ ADijNode::ADijNode()
 	LabelHeuristicComponent->SetTextRenderColor(FColor::Red);
 	LabelHeuristicComponent->SetText(FText::AsNumber(Heuristics));
 	LabelHeuristicComponent->SetVisibility(bAStar);
+
+	LabelFCostComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("FCostLabel"));
+	LabelFCostComponent->SetupAttachment(MeshComponent);
+	// Engine cube is 100 units tall and centered on its pivot, so the top face is at Z = 50
+	LabelFCostComponent->SetRelativeLocation(FVector(-30.0f, 40.0f, 51.0f));
+	LabelFCostComponent->SetHorizontalAlignment(EHTA_Right);
+	LabelFCostComponent->SetVerticalAlignment(EVRTA_TextCenter);
+	LabelFCostComponent->SetWorldRotation(FRotator(90.0f, 0.0f, 180.0f));
+	LabelFCostComponent->SetWorldSize(40.0f);
+	LabelFCostComponent->SetTextRenderColor(FColor::Blue);
+	LabelFCostComponent->SetText(FText::AsNumber(FCost));
+	LabelFCostComponent->SetVisibility(bAStar);
+
+
+
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> BaseColorMaterial(TEXT("/Game/Materials/M_BaseColor.M_BaseColor"));
 	if (BaseColorMaterial.Succeeded())
 	{
@@ -74,6 +87,7 @@ void ADijNode::SetMaterialColor(const FLinearColor& NewColor)
 void ADijNode::SetCost(int NewCost)
 {
 	Cost = NewCost;
+ SetFCost(Cost + Heuristics);
 	if (LabelComponent)
 	{
 		LabelComponent->SetText(FText::AsNumber(Cost));
@@ -91,11 +105,16 @@ void ADijNode::SetAStar(bool bEnabled)
 	{
 		LabelHeuristicComponent->SetVisibility(bAStar);
 	}
+   if (LabelFCostComponent)
+	{
+		LabelFCostComponent->SetVisibility(bAStar);
+	}
 }
 
 void ADijNode::SetHeuristics(int NewHeuristics)
 {
 	Heuristics = NewHeuristics;
+    SetFCost(Cost + Heuristics);
 	if (LabelHeuristicComponent)
 	{
 		LabelHeuristicComponent->SetText(FText::AsNumber(Heuristics));
@@ -103,6 +122,15 @@ void ADijNode::SetHeuristics(int NewHeuristics)
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("LabelHeuristicComponent is null. Cannot update heuristic label."));
+	}
+}
+
+void ADijNode::SetFCost(int NewFCost)
+{
+	FCost = NewFCost;
+	if (LabelFCostComponent)
+	{
+		LabelFCostComponent->SetText(FText::AsNumber(FCost));
 	}
 }
 
@@ -133,6 +161,10 @@ void ADijNode::BeginPlay()
 	if (LabelHeuristicComponent)
 	{
 		LabelHeuristicComponent->SetVisibility(bAStar);
+	}
+   if (LabelFCostComponent)
+	{
+		LabelFCostComponent->SetVisibility(bAStar);
 	}
 }
 

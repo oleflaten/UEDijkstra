@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> StartAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> StepAction;
+
 	UPROPERTY()
 	TObjectPtr<ADijSpawner> Spawner;
 
@@ -44,4 +47,5 @@ private:
 	void OnRightClick(const FInputActionValue& Value);
 	void OnMiddleClick(const FInputActionValue& Value);
 	void OnStartAction(const FInputActionValue& Value);
+	void OnStepAction(const FInputActionValue& Value);
 };

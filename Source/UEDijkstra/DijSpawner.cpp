@@ -173,7 +173,7 @@ void ADijSpawner::StepDijkstra()
 	// A visited node is blue (the start node keeps its green color)
 	if (CurrentNode != StartNode)
 	{
-		CurrentNode->SetMaterialColor(FLinearColor::Blue);
+      CurrentNode->SetMaterialColor(FLinearColor(0.3f, 0.65f, 1.0f, 1.0f));
 	}
 
 	// Relax all horizontal and vertical neighbors (no diagonals)
@@ -284,6 +284,7 @@ ADijNode* ADijSpawner::GetNextCurrentNode()
 {
 	ADijNode* BestNode = nullptr;
 	int32 BestPriority = 0;
+    int32 BestCost = 0;
 	int32 BestIndex = 0;
 
 	for (ADijNode* Node : UnvisitedNodes)
@@ -297,16 +298,19 @@ ADijNode* ADijSpawner::GetNextCurrentNode()
 		// Dijkstra: the priority is the cost (g). A*: the priority is cost + heuristic (f = g + h)
 		const int32 Priority = Node->Cost + (bAStar ? Node->Heuristics : 0);
 
-		// The index in the grid (spawned row-major) gives us a stable tie-break order
+      // For equal f scores, prefer the node with the larger g score (and therefore smaller h)
+		// to keep A* focused toward the goal. Use grid position as a final stable tie-break.
 		const int32 NodeIndex = Nodes.IndexOfByKey(TObjectPtr<ADijNode>(Node));
 
-		// The lowest priority wins; ties are broken by grid position for a predictable animation
+       // The lowest f score wins; equal scores favor progress toward the goal.
 		if (!BestNode ||
 			Priority < BestPriority ||
-			(Priority == BestPriority && NodeIndex < BestIndex))
+            (Priority == BestPriority && Node->Cost > BestCost) ||
+			(Priority == BestPriority && Node->Cost == BestCost && NodeIndex < BestIndex))
 		{
 			BestNode = Node;
 			BestPriority = Priority;
+          BestCost = Node->Cost;
 			BestIndex = NodeIndex;
 		}
 	}

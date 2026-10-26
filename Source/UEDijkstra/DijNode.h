@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra")
 	int Heuristics{ 0 };
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dijkstra")
+ int FCost{ 999 };
+
 	void SetMaterialColor(const FLinearColor& NewColor);
 	void SetCost(int NewCost);
 
@@ -38,6 +41,7 @@ public:
 	void SetAStar(bool bEnabled);
 
 	void SetHeuristics(int NewHeuristics);
+	void SetFCost(int NewFCost);
 
 protected:
 	virtual void BeginPlay() override;
@@ -51,6 +55,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UTextRenderComponent> LabelHeuristicComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UTextRenderComponent> LabelFCostComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Appearance", meta = (AllowPrivateAccess = "true"))
 	FLinearColor TintColor = FLinearColor::White;
