@@ -21,7 +21,6 @@ protected:
     virtual void BeginPlay() override;
 
 private:
-	void OnLeftClick();
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
     TObjectPtr<USceneComponent> RootScene;
